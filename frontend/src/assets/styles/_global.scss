@@ -22,3 +22,19 @@ html, body {
   cursor: pointer;
   border: 0;
 }
+
+.input {
+  box-sizing: border-box;
+  padding: 17px 20px;
+  border: 2px solid $main-light-blue;
+  border-radius: 3px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: $gray-text-color;
+
+  &:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+  }
+}

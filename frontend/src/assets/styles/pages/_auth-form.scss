@@ -1,0 +1,67 @@
+@import "../variables";
+
+.auth-form {
+
+  .auth-title {
+    font-family: 'Lora', sans-serif;
+    font-weight: 400;
+    font-size: 36px;
+    color: $main-light-blue;
+    margin-bottom: 40px;
+  }
+
+  .auth-inputs {
+    margin-bottom: 40px;
+
+    .auth-input {
+      margin-bottom: 5px;
+
+      input {
+        max-width: 422px;
+        width: 100%;
+      }
+    }
+
+    .auth-checkbox {
+      margin-top: 10px;
+      max-width: 422px;
+      display: flex;
+      column-gap: 10px;
+
+      input {
+        margin: 0;
+      }
+
+      label {
+        font-size: 14px;
+        line-height: 130%;
+        color: $main-dark-blue;
+
+        a {
+          color: $main-light-blue;
+        }
+      }
+    }
+  }
+
+  .auth-button {
+    margin-top: 40px;
+
+    .button {
+      max-width: 422px;
+      width: 100%;
+    }
+  }
+
+  .auth-link {
+    margin-top: 8px;
+    font-size: 14px;
+    color: $main-dark-blue;
+
+    a {
+      text-decoration: none;
+      margin-left: 5px;
+      color: $main-light-blue;
+    }
+  }
+}
