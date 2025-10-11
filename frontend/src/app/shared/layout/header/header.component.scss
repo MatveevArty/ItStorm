@@ -6,7 +6,6 @@
   .container {
     display: flex;
     justify-content: space-between;
-    font-family: 'Montserrat', sans-serif;
     font-weight: 500;
     row-gap: 30px;
 
@@ -22,7 +21,9 @@
 
         ul {
           display: flex;
-          column-gap: 30px;
+          gap: 15px 30px;
+          flex-wrap: wrap;
+          justify-content: center;
           margin: 0;
           padding: 0;
 
@@ -79,20 +80,6 @@
       max-width: 100%;
       column-gap: unset;
       justify-content: space-around;
-    }
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .header .container {
-
-    .header-left {
-
-      .header-menu ul {
-        row-gap: 15px;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
     }
   }
 }

@@ -1,9 +1,24 @@
 html, body {
   margin: 0;
   padding: 0;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .container {
   max-width: $container-width;
   margin: 0 auto;
+}
+
+.button {
+  padding: 15px 33px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  text-align: center;
+  background-color: $main-light-blue;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: #FFFFFF;
+  cursor: pointer;
+  border: 0;
 }
