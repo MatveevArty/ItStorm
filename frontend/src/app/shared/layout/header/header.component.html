@@ -32,10 +32,22 @@
       </a>
 
       <div class="header-actions">
-        <a [routerLink]="'/login'">
+        <a [routerLink]="'/login'" *ngIf="!isLoggedIn">
           <img src="/assets/images/pages/header/user.svg" alt="user">
 
           <span>Войти</span>
+        </a>
+
+        <a *ngIf="isLoggedIn" [matMenuTriggerFor]="menu">
+          <img src="/assets/images/pages/header/user.svg" alt="user">
+
+          <span>Привет, {{ this.username }}!</span>
+
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item>
+              <span (click)="logout()">Выйти</span>
+            </button>
+          </mat-menu>
         </a>
       </div>
     </div>

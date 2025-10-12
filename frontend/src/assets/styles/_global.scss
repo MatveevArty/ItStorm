@@ -21,6 +21,11 @@ html, body {
   color: #FFFFFF;
   cursor: pointer;
   border: 0;
+
+  &:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+  }
 }
 
 .input {
@@ -32,9 +37,4 @@ html, body {
   font-weight: 400;
   font-size: 14px;
   color: $gray-text-color;
-
-  &:disabled {
-    background-color: gray;
-    cursor: not-allowed;
-  }
 }
