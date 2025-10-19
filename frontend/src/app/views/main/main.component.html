@@ -1,1 +1,97 @@
-<p>main works!</p>
+<section class="main">
+  <div class="container">
+    <div class="main-carousel">
+      <div class="carousel-chevrons">
+        <a class="carousel-chevron move-backwards" (click)="owlCar.prev()">
+          <img src="/assets/images/pages/main/prev-page-chevron.svg" alt="Назад">
+        </a>
+
+        <a class="carousel-chevron move-forward" (click)="owlCar.next()">
+          <img src="/assets/images/pages/main/next-page-chevron.svg" alt="Вперёд">
+        </a>
+      </div>
+
+      <div class="carousel-slides">
+        <owl-carousel-o [options]="customOptions" #owlCar>
+          <ng-template carouselSlide>
+            <div class="carousel-slide carousel-slide-1">
+              <div class="carousel-slide-circle"></div>
+
+              <div class="carousel-slide-info">
+                <div class="carousel-slide-info-title">Предложение месяца</div>
+
+                <div class="carousel-slide-info-text">Продвижение в <br> Instagram для вашего бизнеса <span>-15%</span>!
+                </div>
+
+                <div class="carousel-slide-info-action">
+                  <button class="button">Подробнее</button>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+
+          <ng-template carouselSlide>
+            <div class="carousel-slide carousel-slide-2">
+              <div class="carousel-slide-circle"></div>
+
+              <div class="carousel-slide-info">
+                <div class="carousel-slide-info-title">Акция</div>
+
+                <div class="carousel-slide-info-text">Нужен грамотный <span>копирайтер?</span></div>
+
+                <div class="carousel-slide-info-undertext">Весь декабрь у нас действует акция на работу копирайтера.
+                </div>
+
+                <div class="carousel-slide-info-action">
+                  <button class="button">Подробнее</button>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+
+          <ng-template carouselSlide>
+            <div class="carousel-slide carousel-slide-3">
+              <div class="carousel-slide-circle"></div>
+
+              <div class="carousel-slide-info">
+                <div class="carousel-slide-info-title">Новость дня</div>
+
+                <div class="carousel-slide-info-text"><span>6 место</span> в ТОП-10 <br>SMM-агенств Москвы!</div>
+
+                <div class="carousel-slide-info-undertext">Мы благодарим каждого, кто голосовал за нас!</div>
+
+                <div class="carousel-slide-info-action">
+                  <button class="button">Подробнее</button>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </owl-carousel-o>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="services">
+  <div class="container">
+    <div class="services-header">Услуги, которые мы предлагаем</div>
+
+    <div class="services-items">
+      <div class="service-item" *ngFor="let item of serviceCards">
+        <div class="service-item-image">
+          <img [src]="'/assets/images/pages/main/' + item.image + '.png'" alt="Картинка">
+        </div>
+
+        <div class="service-item-title">{{ item.title }}</div>
+
+        <div class="service-item-text">{{ item.text }}</div>
+
+        <div class="service-item-actions">
+          <div class="service-item-price">От {{ item.price }}₽</div>
+
+          <button class="button">Подробнее</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
