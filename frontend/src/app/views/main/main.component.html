@@ -77,19 +77,186 @@
     <div class="services-header">Услуги, которые мы предлагаем</div>
 
     <div class="services-items">
-      <div class="service-item" *ngFor="let item of serviceCards">
-        <div class="service-item-image">
-          <img [src]="'/assets/images/pages/main/' + item.image + '.png'" alt="Картинка">
+      <app-service-card class="services-item" *ngFor="let item of serviceCards; let i = index" [serviceCard]="item"
+                        [isMainPageService]="true"
+                        [mainPageServiceNumber]="i + 1"></app-service-card>
+    </div>
+  </div>
+</section>
+
+<section class="about">
+  <div class="container">
+    <div class="about-image">
+      <img src="assets/images/pages/main/about-image.png" alt="О нас">
+    </div>
+
+    <div class="about-info">
+      <div class="about-info-text">
+        <div class="about-info-text-title">Кто мы и чем мы занимаемся?</div>
+
+        <div class="about-info-text-description">
+          <span>АйтиШторм</span> — это ваш помощник №1 при решении таких вопросов, как продвижение в сети, разработка
+          сайтов для
+          бизнеса и личного бренда, сторисмейкинг, копирайтинг, маркетинг, разработка визуальной концепции и создание
+          инфопродуктов. Компания была основана в 2019 году и за всё это время смогла выйти в ТОП-10 агенств,
+          предлагающих услуги продвижения в сети.
+        </div>
+      </div>
+
+      <div class="about-info-advantages">
+        <div class="about-info-advantages-title">Наши преимущества</div>
+
+        <div class="about-info-advantages-box">
+          <div class="about-info-advantage">
+            <div class="about-info-advantage-dot">
+              <div class="about-info-advantage-dot-number">1</div>
+            </div>
+
+            <div class="about-info-advantage-text">
+              <span>Мастерски вовлекаем аудиториюв процесс.</span> Мы увеличиваем процент вовлечённости за короткий
+              промежуток времени.
+            </div>
+          </div>
+
+          <div class="about-info-advantage">
+            <div class="about-info-advantage-dot">
+              <div class="about-info-advantage-dot-number">2</div>
+            </div>
+
+            <div class="about-info-advantage-text">
+              <span>Разрабатываем бомбическую визуальную концепцию.</span> Наши специалисты знают как создать уникальный
+              образ вашего проекта.
+            </div>
+          </div>
+
+          <div class="about-info-advantage">
+            <div class="about-info-advantage-dot">
+              <div class="about-info-advantage-dot-number">3</div>
+            </div>
+
+            <div class="about-info-advantage-text">
+              <span>Создаём мощные воронки с помощью текстов.</span> Наши копирайтеры создают не только вкусные текста,
+              но и классные воронки.
+            </div>
+          </div>
+
+          <div class="about-info-advantage">
+            <div class="about-info-advantage-dot">
+              <div class="about-info-advantage-dot-number">4</div>
+            </div>
+
+            <div class="about-info-advantage-text">
+              <span>Помогаем продавать больше.</span> Мы не только помогаем разработать стратегию по продажам, но также
+              корректируем её под нужды заказчика.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="popular">
+  <div class="container">
+    <div class="popular-title">Лучшие предложения месяца</div>
+
+    <div class="popular-items">
+      <app-service-card *ngFor="let article of popularArticles" [serviceCard]="article" ></app-service-card>
+    </div>
+
+    <div class="popular-link">
+      Перейти в блог
+    </div>
+  </div>
+</section>
+
+<section class="reviews" id="reviews">
+  <div class="container">
+    <div class="reviews-title">Отзывы о нашей работе</div>
+
+    <div class="reviews-carousel">
+      <owl-carousel-o [options]="customOptionsRev" #owlCarRev>
+        <ng-template carouselSlide *ngFor="let review of reviews">
+          <div class="review-item">
+            <div class="review-item-head">
+              <div class="review-item-head-image">
+                <img src="/assets/images/pages/main/{{ review.image }}" alt="Фото">
+              </div>
+
+              <div class="review-item-head-name">{{ review.name }}</div>
+            </div>
+
+            <div class="review-item-text">{{ review.text }}</div>
+          </div>
+        </ng-template>
+      </owl-carousel-o>
+
+      <div class="reviews-carousel-arrows">
+        <a class="move-backwards" (click)="owlCarRev.prev()">
+          <img src="/assets/images/pages/main/reviews-prev-page-chevron.svg" alt="Назад">
+        </a>
+
+        <a class="move-forward" (click)="owlCarRev.next()">
+          <img src="/assets/images/pages/main/reviews-next-page-chevron.svg" alt="Вперёд">
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contacts">
+  <div class="container">
+    <div class="contacts-map">
+      <iframe
+        src="https://yandex.ru/map-widget/v1/?um=constructor%3A2c5ca67a1447445d48752ac4ed91926b452bfbe80ef129b17bd0ecc4509ca87d&amp;source=constructor"
+        width="607" height="438" frameborder="0"></iframe>
+    </div>
+
+    <div class="contacts-info">
+      <div class="contacts-info-title">Контакты</div>
+
+      <div class="contacts-info-blocks">
+        <div class="contacts-info-block">
+          <div class="contacts-info-block-title">Адрес</div>
+
+          <div class="contacts-info-block-text">
+            Главный офис компании АйтиШторм находится по адресу Пресненская наб., 12,
+            Москва, Россия, 123317.
+          </div>
         </div>
 
-        <div class="service-item-title">{{ item.title }}</div>
+        <div class="contacts-info-block">
+          <div class="contacts-info-block-title">Телефон</div>
 
-        <div class="service-item-text">{{ item.text }}</div>
+          <a href="tel:+74993431343" class="contacts-info-block-text">
+            +7 (499) 343-13-34
+          </a>
+        </div>
 
-        <div class="service-item-actions">
-          <div class="service-item-price">От {{ item.price }}₽</div>
+        <div class="contacts-info-block">
+          <div class="contacts-info-block-title">Электронный адрес</div>
 
-          <button class="button">Подробнее</button>
+          <div class="contacts-info-block-text">
+            info@itstorm.com
+          </div>
+        </div>
+
+        <div class="contacts-info-block">
+          <div class="contacts-info-block-title">Мы в социальных сетях</div>
+
+          <div class="contacts-info-block-socials">
+            <div class="contacts-info-block-social">
+              <img src="assets/images/pages/main/contacts-vk-icon.svg" alt="ВК">
+            </div>
+
+            <div class="contacts-info-block-social">
+              <img src="assets/images/pages/main/contacts-fb-icon.svg" alt="FB">
+            </div>
+
+            <div class="contacts-info-block-social">
+              <img src="assets/images/pages/main/contacts-inst-icon.svg" alt="INST">
+            </div>
+          </div>
         </div>
       </div>
     </div>

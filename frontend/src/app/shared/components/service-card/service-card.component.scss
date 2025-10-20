@@ -1,0 +1,63 @@
+@import '../../../../assets/styles/variables';
+
+.service-card {
+  width: 290px;
+  flex-wrap: wrap;
+  color: $main-light-blue;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+
+  &__category {
+    position: absolute;
+    font-size: 11px;
+    padding: 10px 18px;
+    background-color: $abs-white;
+    border-radius: 5px;
+    top: 10px;
+    right: 9px;
+  }
+
+  &__image {
+    width: 100%;
+    margin-bottom: 15px;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  &__title {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 15px;
+  }
+
+  &__description {
+    font-size: 14px;
+    line-height: 130%;
+    color: $main-dark-blue;
+  }
+
+  &__link {
+    font-size: 16px;
+    line-height: 130%;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-top: auto;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+
+    &-price {
+      font-size: 20px;
+      font-weight: 600;
+    }
+  }
+}

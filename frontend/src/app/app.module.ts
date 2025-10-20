@@ -13,6 +13,7 @@ import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule} from "@angular/materia
 import {MatMenuModule} from "@angular/material/menu";
 import {AuthInterceptor} from "./core/auth/auth.interceptor";
 import {CarouselModule} from "ngx-owl-carousel-o";
+import {SharedModule} from "./shared/shared.module";
 
 @NgModule({
   declarations: [
@@ -20,13 +21,14 @@ import {CarouselModule} from "ngx-owl-carousel-o";
     LayoutComponent,
     HeaderComponent,
     FooterComponent,
-    MainComponent
+    MainComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     MatSnackBarModule,
     MatMenuModule,
+    SharedModule,
     CarouselModule,
     AppRoutingModule,
     BrowserAnimationsModule

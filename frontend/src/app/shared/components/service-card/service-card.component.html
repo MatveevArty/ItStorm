@@ -1,0 +1,27 @@
+<div class="service-card" *ngIf="serviceCard">
+  <div class="service-card__info">
+    <div class="service-card__category" *ngIf="!isMainPageService">{{ serviceCard.category }}</div>
+
+    <div class="service-card__image" *ngIf="!isMainPageService">
+      <img [src]="serverStaticPath + serviceCard.image" alt="">
+    </div>
+
+    <div class="service-card__image" *ngIf="isMainPageService">
+      <img [src]="'assets/images/pages/main/' + serviceCard.image" alt="">
+    </div>
+
+
+    <div class="service-card__title">{{ serviceCard.title }}</div>
+
+    <div class="service-card__description">{{ serviceCard.description }}</div>
+
+
+    <div class="service-card__link" *ngIf="!isMainPageService">Читать далее</div>
+  </div>
+
+  <div class="service-card__actions" *ngIf="isMainPageService">
+    <div class="service-card__actions-price">От {{ serviceCard.price }} ₽</div>
+
+    <button class="button">Подробнее</button>
+  </div>
+</div>
