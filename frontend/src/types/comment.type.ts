@@ -10,4 +10,6 @@ export type CommentType = {
   likesCount: number,
   dislikesCount: number,
   user: UserType,
+  isLikePressed?: boolean,
+  isDislikePressed?: boolean,
 }

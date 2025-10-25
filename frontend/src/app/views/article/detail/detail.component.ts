@@ -11,6 +11,7 @@ import {AuthService} from "../../../core/auth/auth.service";
 import {DefaultResponseType} from "../../../../types/default-response.type";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {HttpErrorResponse} from "@angular/common/http";
+import {ReactionTypeEnum} from "../../../../enums/reaction-type.enum";
 
 @Component({
   selector: 'app-detail',
@@ -68,6 +69,16 @@ export class DetailComponent implements OnInit {
     comment: ['', Validators.required],
   });
 
+  /**
+   * Массив комментариев для данной статьи с реакциями данного пользователя
+   */
+  public currentUserArticleCommentWithReactions: { comment: string, action: string }[] = [];
+
+  /**
+   * Типы реакций для комментария
+   * @protected ччч
+   */
+  protected readonly ReactionTypeEnum = ReactionTypeEnum;
 
   constructor(private readonly articlesService: ArticlesService,
               private readonly actionsService: ActionsService,
@@ -113,11 +124,35 @@ export class DetailComponent implements OnInit {
               console.log(this.articleComments);
               console.log(this.articleCommentsShownNow);
               console.log(this.haveMoreArticleComments);
+
+              if (this.isLoggedIn) {
+                this.setActiveLikesDislikes();
+              }
             }
           );
         }
       );
     })
+  }
+
+  public setActiveLikesDislikes() {
+    if (this.article) {
+      this.actionsService.getUserCommentsWithReactionForArticle(this.article.id).subscribe(data => {
+        this.currentUserArticleCommentWithReactions = data;
+
+        this.currentUserArticleCommentWithReactions.forEach(item => {
+          const foundComment = this.articleComments.find(comment => comment.id === item.comment);
+
+          if (foundComment) {
+            if (item.action === ReactionTypeEnum.Like) {
+              foundComment.isLikePressed = true;
+            } else if (item.action === ReactionTypeEnum.Dislike) {
+              foundComment.isDislikePressed = true;
+            }
+          }
+        })
+      });
+    }
   }
 
   /**
@@ -180,6 +215,9 @@ export class DetailComponent implements OnInit {
     }
   }
 
+  /**
+   * Получение комментариев
+   */
   public getAllComments() {
     if (this.article && this.article.id) {
       this.actionsService.getArticleComments(this.article.id, this.articleCommentsShownNow).subscribe(
@@ -196,6 +234,7 @@ export class DetailComponent implements OnInit {
             console.log(this.articleComments);
             console.log(this.articleCommentsShownNow);
             console.log(this.haveMoreArticleComments);
+
           } else {
             data.comments.forEach(comment => this.articleComments.push(comment));
             this.articleCommentsShownNow = this.articleComments.length;
@@ -205,7 +244,80 @@ export class DetailComponent implements OnInit {
             console.log(this.articleCommentsShownNow);
             console.log(this.haveMoreArticleComments);
           }
+
+          if (this.isLoggedIn) {
+            this.setActiveLikesDislikes();
+          }
         });
     }
   }
+
+
+  public applyReactionToComment(commentId: string, reactionType: ReactionTypeEnum): void {
+    if (this.isLoggedIn) {
+      this.actionsService.addReactionToComment(commentId, reactionType).subscribe({
+        next: (data: DefaultResponseType) => {
+          if ((data as DefaultResponseType).error) {
+            this._snackBar.open('Ошибка при добавлении реакции к комментарию');
+            throw new Error((data as DefaultResponseType).message);
+          }
+
+          if (reactionType === ReactionTypeEnum.Like) {
+            this._snackBar.open('Лайк к комментарию успешно добавлен');
+          } else if (reactionType === ReactionTypeEnum.Dislike) {
+            this._snackBar.open('Дизлайк к комментарию успешно добавлен');
+          } else if (reactionType === ReactionTypeEnum.Violate) {
+            this._snackBar.open('Жаолба к комментарию успешно добавлена');
+          }
+
+          if (reactionType !== ReactionTypeEnum.Violate) {
+            let currentCommentLikes = 0;
+            let currentCommentDislikes = 0;
+
+            this.actionsService.getReactionsToComment(commentId).subscribe(data => {
+              data.forEach(item => {
+                if (item.comment === commentId && item.action === ReactionTypeEnum.Like) {
+                  currentCommentLikes += 1;
+                  const currentComment = this.articleComments.find(articleComment => articleComment.id === commentId);
+
+                  if (currentComment) {
+                    currentComment.isLikePressed = true;
+                    currentComment.isDislikePressed = false;
+                  }
+
+                } else if (item.comment === commentId && item.action === ReactionTypeEnum.Dislike) {
+                  currentCommentDislikes += 1;
+
+                  const currentComment = this.articleComments.find(articleComment => articleComment.id === commentId);
+
+                  if (currentComment) {
+                    currentComment.isDislikePressed = true;
+                    currentComment.isLikePressed = false;
+                  }
+                }
+              });
+
+              const currentComment = this.articleComments.find(comment => comment.id === commentId);
+
+              if (currentComment) {
+                currentComment.likesCount = currentCommentLikes;
+                currentComment.dislikesCount = currentCommentDislikes;
+              }
+            });
+          }
+        },
+        error: (errorResponse: HttpErrorResponse) => {
+          if (errorResponse.error && errorResponse.error.message) {
+            this._snackBar.open(errorResponse.error.message);
+          } else {
+            this._snackBar.open('Ошибка при добавлении реакции к комментарию');
+          }
+        }
+      })
+    } else {
+      this._snackBar.open('Необходимо авторизация для добавления реакций к комментариям');
+    }
+  }
+
+
 }

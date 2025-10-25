@@ -48,7 +48,8 @@
                       [ngStyle]="{ 'border-color': comment?.invalid && (comment?.dirty || comment?.touched) ? 'red' : ''}">
             </textarea>
 
-            <button class="button" [disabled]="commentForm.invalid" (click)="addComment()">Опубликовать комментарий</button>
+            <button class="button" [disabled]="commentForm.invalid" (click)="addComment()">Опубликовать комментарий
+            </button>
           </div>
 
           <div class="detail-commenting-comments">
@@ -68,19 +69,30 @@
               <div class="detail-comment-text">{{ comment.text }}</div>
 
               <div class="detail-comment-actions">
-                <div class="detail-comment-action detail-comment-actions-like">
+                <div class="detail-comment-action detail-comment-actions-like"
+                     (click)="applyReactionToComment(comment.id, ReactionTypeEnum.Like)">
                   <span>{{ comment.likesCount }}</span>
 
-                  <img src="assets/images/pages/article/comment-like-icon.svg" alt="Лайк">
+                  <img src="assets/images/pages/article/comment-like-icon.svg" alt="Лайк"
+                       *ngIf="!comment.isLikePressed">
+
+                  <img src="assets/images/pages/article/comment-like-pressed-icon.svg" alt="Лайк нажат"
+                       *ngIf="comment.isLikePressed">
                 </div>
 
-                <div class="detail-comment-action detail-comment-actions-dislike">
+                <div class="detail-comment-action detail-comment-actions-dislike"
+                     (click)="applyReactionToComment(comment.id, ReactionTypeEnum.Dislike)">
                   <span>{{ comment.dislikesCount }}</span>
 
-                  <img src="assets/images/pages/article/comment-dislike-icon.svg" alt="Дизайк">
+                  <img src="assets/images/pages/article/comment-dislike-icon.svg" alt="Дизайк"
+                       *ngIf="!comment.isDislikePressed">
+
+                  <img src="assets/images/pages/article/comment-dislike-pressed-icon.svg" alt="Дизайк нажат"
+                       *ngIf="comment.isDislikePressed">
                 </div>
 
-                <div class="detail-comment-action detail-comment-actions-dislike">
+                <div class="detail-comment-action detail-comment-actions-dislike"
+                     (click)="applyReactionToComment(comment.id, ReactionTypeEnum.Violate)">
                   <img src="assets/images/pages/article/comment-report-icon.svg" alt="Репорт">
                 </div>
               </div>
