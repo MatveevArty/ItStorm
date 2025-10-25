@@ -1,0 +1,5 @@
+<div class="category-filter" [class.disabled]="!isChecked" *ngIf="category" (click)="updateFilterParam(category.url)">
+  <div class="category-filter-name">{{ category.name ? category.name : '' }}</div>
+
+  <div class="category-filter-sign">{{ isChecked ? '+' : '-' }}</div>
+</div>

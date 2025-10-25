@@ -1,0 +1,51 @@
+<div class="catalog">
+  <div class="container">
+    <div class="catalog-title">Каталог</div>
+
+    <div class="catalog-head">
+      <div class="catalog-head__filters">
+        <div class="catalog-head__filter">
+          <span>Дизайн</span>
+          <a>
+            <img src="/assets/images/pages/catalog/close-cross.svg" alt="Крестик">
+          </a>
+        </div>
+      </div>
+
+      <div class="catalog-head__sorting" [class.open]="filterOpen">
+        <div class="sorting-head" (click)="toggleSorting()">
+          <span>Фильтр</span>
+
+          <img *ngIf="!filterOpen" src="/assets/images/pages/catalog/down-chevron.svg" alt="Развернуть">
+          <img *ngIf="filterOpen" src="/assets/images/pages/catalog/up-chevron.svg" alt="Свернуть">
+        </div>
+
+        <div class="sorting-body">
+          <app-category-filter class="sorting-body__item" *ngFor="let category of categories" [category]="category" ></app-category-filter>
+        </div>
+      </div>
+    </div>
+
+    <div class="catalog-articles">
+      <app-service-card *ngFor="let article of articles" [serviceCard]="article"></app-service-card>
+    </div>
+
+    <div class="pagination">
+      <div class="pagination-arrow disabled">
+        <img src="/assets/images/pages/catalog/prev-page-chevron.svg" alt="Назад">
+      </div>
+
+      <div class="pagination-pages">
+        <a class="pagination-page active">1</a>
+        <a class="pagination-page">2</a>
+        <a class="pagination-page">3</a>
+        <a class="pagination-page">4</a>
+        <a class="pagination-page">5</a>
+      </div>
+
+      <div class="pagination-arrow">
+        <img src="/assets/images/pages/catalog/next-page-chevron.svg" alt="Вперёд">
+      </div>
+    </div>
+  </div>
+</div>
