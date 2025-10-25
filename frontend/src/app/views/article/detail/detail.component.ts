@@ -7,6 +7,10 @@ import {environment} from "../../../../environments/environment";
 import {FormBuilder, Validators} from "@angular/forms";
 import {ActionsService} from "../../../shared/services/actions.service";
 import {CommentType} from "../../../../types/comment.type";
+import {AuthService} from "../../../core/auth/auth.service";
+import {DefaultResponseType} from "../../../../types/default-response.type";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-detail',
@@ -48,6 +52,16 @@ export class DetailComponent implements OnInit {
   public haveMoreArticleComments: boolean = false;
 
   /**
+   * Общее количество комментариев для данной статьи
+   */
+  public totalArticleComments: number = 0;
+
+  /**
+   * Флаг факта логина пользователем
+   */
+  public isLoggedIn: boolean = false;
+
+  /**
    * Форма с данными заказа
    */
   public commentForm = this.fb.group({
@@ -58,10 +72,17 @@ export class DetailComponent implements OnInit {
   constructor(private readonly articlesService: ArticlesService,
               private readonly actionsService: ActionsService,
               private readonly activatedRoute: ActivatedRoute,
-              private readonly fb: FormBuilder,) {
+              private readonly fb: FormBuilder,
+              private readonly authService: AuthService,
+              private _snackBar: MatSnackBar,) {
+    this.isLoggedIn = this.authService.getIsLoggedIn();
   }
 
   ngOnInit(): void {
+    this.authService.isLoggedSubject.subscribe((isLoggedIn: boolean) => {
+      this.isLoggedIn = isLoggedIn;
+    });
+
     this.activatedRoute.params.subscribe(params => {
       this.articlesService.getArticle(params['url']).subscribe(
         (data: ArticleResponseType) => {
@@ -75,6 +96,8 @@ export class DetailComponent implements OnInit {
 
           this.actionsService.getArticleComments(this.article.id, 0).subscribe(
             (data) => {
+              this.totalArticleComments = data.allCount;
+
               if (data.comments.length > 3) {
                 for (let i = 0; i <= 2; i++) {
                   this.articleComments.push(data.comments[i]);
@@ -107,44 +130,53 @@ export class DetailComponent implements OnInit {
   /**
    * Соаздние заказа
    */
-  public createOrder(): void {
+  public addComment(): void {
     if (this.commentForm.valid && this.comment?.value) {
-
       const paramsObject: { comment: string, article: string } = {
         comment: this.comment?.value,
-        article: this.article?.url ? this.article?.url : '',
+        article: this.article?.id ? this.article?.id : '',
       }
 
-      console.log(paramsObject);
+      this.actionsService.addCommentToArticle(paramsObject)
+        .subscribe({
+          next: (data: DefaultResponseType) => {
+            if ((data as DefaultResponseType).error) {
+              throw new Error((data as DefaultResponseType).message);
+            }
 
+            this._snackBar.open('Комментарий успешно добавлен');
 
-      //   this.orderService.createOrder(paramsObject)
-      //     .subscribe({
-      //       next: (data: OrderType | DefaultResponseType) => {
-      //         if ((data as DefaultResponseType).error !== undefined) {
-      //           throw new Error((data as DefaultResponseType).message);
-      //         }
-      //
-      //         this.dialogRef = this.matDialog.open(this.popup);
-      //         this.dialogRef.backdropClick()
-      //           .subscribe(() => {
-      //             this.router.navigate(['/']);
-      //           })
-      //
-      //         this.cartService.setCount(0);
-      //       },
-      //       error: (errorResponse: HttpErrorResponse) => {
-      //         if (errorResponse.error && errorResponse.error.message) {
-      //           this._snackBar.open(errorResponse.error.message);
-      //         } else {
-      //           this._snackBar.open('Ошибка создания заказа');
-      //         }
-      //       },
-      //     });
-      // } else {
-      //   this.orderForm.markAllAsTouched();
-      //   this._snackBar.open('Заполните необходимые поля');
-      // }
+            if (this.comment) {
+              this.comment.setValue('');
+              this.commentForm.markAsUntouched();
+              this.commentForm.markAsPristine();
+            }
+
+            if (this.article) {
+              console.log(1);
+              this.actionsService.getArticleComments(this.article.id, 0).subscribe(
+                (data) => {
+                  this.articleComments = [data.comments[0], ...this.articleComments];
+                  this.articleCommentsShownNow += 1;
+
+                  console.log(this.articleComments);
+                  console.log(this.articleCommentsShownNow);
+                  console.log(this.haveMoreArticleComments);
+                }
+              );
+            }
+          },
+          error: (errorResponse: HttpErrorResponse) => {
+            if (errorResponse.error && errorResponse.error.message) {
+              this._snackBar.open(errorResponse.error.message);
+            } else {
+              this._snackBar.open('Ошибка при добавлении комментария');
+            }
+          },
+        });
+    } else {
+      this.commentForm.markAllAsTouched();
+      this._snackBar.open('Заполните поле комментария');
     }
   }
 
@@ -152,6 +184,8 @@ export class DetailComponent implements OnInit {
     if (this.article && this.article.id) {
       this.actionsService.getArticleComments(this.article.id, this.articleCommentsShownNow).subscribe(
         (data) => {
+          this.totalArticleComments = data.allCount;
+
           if (data.allCount - this.articleCommentsShownNow > 10) {
             for (let i = 0; i < 9; i++) {
               this.articleComments.push(data.comments[i]);

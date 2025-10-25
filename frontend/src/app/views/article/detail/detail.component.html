@@ -38,18 +38,17 @@
         <div class="detail-commenting">
           <div class="detail-commenting-title">Комментарии к статье</div>
 
-          <div class="detail-commenting-auth">
+          <div class="detail-commenting-auth" *ngIf="!isLoggedIn">
             Чтобы оставлять комментарии, <a [routerLink]="'/login'">войдите</a> или <a [routerLink]="'/signup'">зарегистрируйтесь</a>.
           </div>
 
-          <div class="detail-commenting-form" [formGroup]="commentForm">
+          <div class="detail-commenting-form" *ngIf="isLoggedIn" [formGroup]="commentForm">
             <textarea class="input" cols="30" rows="5" placeholder="Оставьте свой комментарий..."
                       [formControlName]="'comment'"
                       [ngStyle]="{ 'border-color': comment?.invalid && (comment?.dirty || comment?.touched) ? 'red' : ''}">
             </textarea>
 
-            <button class="button" [disabled]="commentForm.invalid" (click)="createOrder()">Опубликовать комментарий
-            </button>
+            <button class="button" [disabled]="commentForm.invalid" (click)="addComment()">Опубликовать комментарий</button>
           </div>
 
           <div class="detail-commenting-comments">
