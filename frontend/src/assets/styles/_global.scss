@@ -38,3 +38,11 @@ html, body {
   font-size: 14px;
   color: $gray-text-color;
 }
+
+.detail-main-text h1, h2, h3, h4, h5, h6 {
+  color: $main-light-blue;
+}
+
+.detail-main-text p b, p {
+  color: $very-dark-blue;
+}

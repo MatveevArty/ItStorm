@@ -1,6 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {ServiceCardType} from "../../../../types/service-card.type";
 import {environment} from "../../../../environments/environment";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-service-card',
@@ -27,7 +28,13 @@ export class ServiceCardComponent  {
    */
   public api = environment.api;
 
-  constructor() { }
+  constructor(private readonly router: Router,) { }
 
 
+  /**
+   * Перенаправление на страницу сстатьи данной карточки
+   */
+  public navigate() {
+    this.router.navigate(['/article/' + this.serviceCard.url]);
+  }
 }

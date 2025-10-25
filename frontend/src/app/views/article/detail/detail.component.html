@@ -1,1 +1,111 @@
-<p>detail works!</p>
+<div class="detail" *ngIf="article">
+  <div class="container">
+    <div class="detail-breadcrumbs"><span>Блог /</span> {{ article.title }}</div>
+
+    <div class="detail-block">
+      <div class="detail-block-info">
+        <div class="detail-block-info-title">{{ article.title }}</div>
+        <div class="detail-block-info-description">{{ article.description }}</div>
+      </div>
+
+      <div class="detail-block-image">
+        <img [src]="serverStaticPath + article.image" alt="Картинка">
+      </div>
+    </div>
+
+    <div class="detail-main">
+      <div class="detail-main-info">
+        <div class="detail-text" #articleText [innerHTML]="article.text"></div>
+
+        <div class="detail-share">
+          <div class="detail-share-text">Понравилась статья? Поделитесь ею в своих социальных сетях!</div>
+
+          <div class="detail-share-socials">
+            <div class="detail-share-social">
+              <img src="assets/images/pages/article/contacts-light-vk-icon.svg" alt="ВК">
+            </div>
+
+            <div class="detail-share-social">
+              <img src="assets/images/pages/article/contacts-light-fb-icon.svg" alt="FB">
+            </div>
+
+            <div class="detail-share-social">
+              <img src="assets/images/pages/article/contacts-light-inst-icon.svg" alt="INST">
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-commenting">
+          <div class="detail-commenting-title">Комментарии к статье</div>
+
+          <div class="detail-commenting-auth">
+            Чтобы оставлять комментарии, <a [routerLink]="'/login'">войдите</a> или <a [routerLink]="'/signup'">зарегистрируйтесь</a>.
+          </div>
+
+          <div class="detail-commenting-form" [formGroup]="commentForm">
+            <textarea class="input" cols="30" rows="5" placeholder="Оставьте свой комментарий..."
+                      [formControlName]="'comment'"
+                      [ngStyle]="{ 'border-color': comment?.invalid && (comment?.dirty || comment?.touched) ? 'red' : ''}">
+            </textarea>
+
+            <button class="button" [disabled]="commentForm.invalid" (click)="createOrder()">Опубликовать комментарий
+            </button>
+          </div>
+
+          <div class="detail-commenting-comments">
+            <div class="detail-comment" *ngFor="let comment of articleComments">
+              <div class="detail-comment-log">
+                <div class="detail-comment-log-user">
+                  <img src="assets/images/pages/article/user-icon.svg" alt="Иконка">
+                </div>
+
+                <div class="detail-comment-log-info">
+                  <div class="detail-comment-log-info-username">{{ comment.user.name }}</div>
+
+                  <div class="detail-comment-log-info-time">{{ comment.date }}</div>
+                </div>
+              </div>
+
+              <div class="detail-comment-text">{{ comment.text }}</div>
+
+              <div class="detail-comment-actions">
+                <div class="detail-comment-action detail-comment-actions-like">
+                  <span>{{ comment.likesCount }}</span>
+
+                  <img src="assets/images/pages/article/comment-like-icon.svg" alt="Лайк">
+                </div>
+
+                <div class="detail-comment-action detail-comment-actions-dislike">
+                  <span>{{ comment.dislikesCount }}</span>
+
+                  <img src="assets/images/pages/article/comment-dislike-icon.svg" alt="Дизайк">
+                </div>
+
+                <div class="detail-comment-action detail-comment-actions-dislike">
+                  <img src="assets/images/pages/article/comment-report-icon.svg" alt="Репорт">
+                </div>
+              </div>
+            </div>
+
+            <div class="detail-commenting-comments-no" *ngIf="articleComments.length === 0">Комментариев пока нет</div>
+
+            <div class="detail-commenting-comments-more" *ngIf="haveMoreArticleComments" (click)="getAllComments()">
+              <span>Загрузить ещё комментарии</span>
+
+              <img src="assets/images/pages/article/comment-more-chevron.svg" alt="Ещё">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-main-related">
+        <span>Читайте также</span>
+
+        <div class="detail-main-related-articles">
+          <app-service-card *ngFor="let relatedArticle of relatedArticles"
+                            [serviceCard]="relatedArticle"></app-service-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
