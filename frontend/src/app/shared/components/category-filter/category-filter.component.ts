@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {CategoryType} from "../../../../types/category.type";
 import {ActiveParamsType} from "../../../../types/active-params.type";
 import {ActivatedRoute, Router} from "@angular/router";
+import {ActiveParamsUtil} from "../../utils/active-params.util";
 
 @Component({
   selector: 'app-category-filter',
@@ -25,28 +26,14 @@ export class CategoryFilterComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe((params) => {
-      const activeParams: ActiveParamsType = { categories: [] };
-
-      if (params.hasOwnProperty('categories')) {
-        activeParams.categories = Array.isArray(params['categories']) ? params['categories'] : [params['categories']];
-      }
-
-      if (params.hasOwnProperty('page')) {
-        activeParams.page = Number(params['page']);
-      }
-
-      this.activeParams = activeParams;
+      this.activeParams = ActiveParamsUtil.processParams(params);
 
       this.activeParams.categories = [];
       if (params['categories']) {
         this.activeParams.categories = Array.isArray(params['categories']) ? params['categories'] : [params['categories']];
       };
 
-      const isCurrentCategorySelected = this.activeParams.categories.some(item => item === this.category?.url);
-
-      if (isCurrentCategorySelected) {
-        this.isChecked = true;
-      }
+      this.isChecked = this.activeParams.categories.some(item => item === this.category?.url);
 
       console.log(this.activeParams.categories);
     });

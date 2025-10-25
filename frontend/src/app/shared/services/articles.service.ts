@@ -4,6 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {ServiceCardType} from "../../../types/service-card.type";
 import {environment} from "../../../environments/environment";
 import {CategoryType} from "../../../types/category.type";
+import {ActiveParamsType} from "../../../types/active-params.type";
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +23,10 @@ export class ArticlesService {
   /**
    * Запрос на получение  статей
    */
-  public getArticles(): Observable<{ count: number, pages: number, items: ServiceCardType[]}> {
-    return this.http.get<{ count: number, pages: number, items: ServiceCardType[]}>(environment.api + 'articles');
+  public getArticles(activeParams: ActiveParamsType): Observable<{ count: number, pages: number, items: ServiceCardType[]}> {
+    return this.http.get<{ count: number, pages: number, items: ServiceCardType[]}>(environment.api + 'articles', {
+      params: activeParams
+    });
   }
 
   /**

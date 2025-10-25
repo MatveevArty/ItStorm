@@ -4,11 +4,15 @@
 
     <div class="catalog-head">
       <div class="catalog-head__filters">
-        <div class="catalog-head__filter">
-          <span>Дизайн</span>
-          <a>
+        <div class="catalog-head__filter" *ngFor="let appliedFilter of appliedFilters">
+          <span>{{ appliedFilter.name }}</span>
+          <a (click)="removeAppliedFilter(appliedFilter)">
             <img src="/assets/images/pages/catalog/close-cross.svg" alt="Крестик">
           </a>
+        </div>
+
+        <div class="catalog-head__all" *ngIf="appliedFilters.length === 0">
+          Все категории
         </div>
       </div>
 
@@ -30,20 +34,20 @@
       <app-service-card *ngFor="let article of articles" [serviceCard]="article"></app-service-card>
     </div>
 
-    <div class="pagination">
-      <div class="pagination-arrow disabled">
+    <div class="pagination" *ngIf="pages.length > 1">
+      <div class="pagination-arrow" (click)="openPrevPage()"
+           [class.disabled]="this.activeParams.page ? this.activeParams.page === 1: true">
         <img src="/assets/images/pages/catalog/prev-page-chevron.svg" alt="Назад">
       </div>
 
       <div class="pagination-pages">
-        <a class="pagination-page active">1</a>
-        <a class="pagination-page">2</a>
-        <a class="pagination-page">3</a>
-        <a class="pagination-page">4</a>
-        <a class="pagination-page">5</a>
+        <a class="pagination-page" (click)="openPage(page)"
+           [class.active]="this.activeParams.page ? this.activeParams.page === page : (page === 1)"
+           *ngFor="let page of pages">{{ page }}</a>
       </div>
 
-      <div class="pagination-arrow">
+      <div class="pagination-arrow" (click)="openNextPage()"
+           [class.disabled]="this.activeParams.page ? this.activeParams.page === pages.length : false">
         <img src="/assets/images/pages/catalog/next-page-chevron.svg" alt="Вперёд">
       </div>
     </div>
