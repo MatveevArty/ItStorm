@@ -22,6 +22,40 @@
   <div class="service-card__actions" *ngIf="isMainPageService">
     <div class="service-card__actions-price">От {{ serviceCard.price }} ₽</div>
 
-    <button class="button">Подробнее</button>
+    <button class="button" (click)="openFormPopup()">Подробнее</button>
   </div>
 </div>
+
+<ng-template #popup>
+  <div class="request-popup">
+    <div class="request-popup-title">Заявка на услугу</div>
+
+    <div class="request-popup-close" (click)="closeFormPopup()">
+      <img src="assets/images/pages/main/close-cross-gray.svg" alt="Крестик">
+    </div>
+
+    <form class="request-popup-form" [formGroup]="serviceRequestForm">
+      <input type="text" class="input"
+             [ngStyle]="{'border-color': serviceType?.invalid && (serviceType?.touched || serviceType?.dirty) ? 'red' : ''}"
+             placeholder="Тип услуги" [formControlName]="'serviceType'">
+
+      <input type="password" class="input"
+             [ngStyle]="{'border-color': firstName?.invalid && (firstName?.touched || firstName?.dirty) ? 'red' : ''}"
+             placeholder="Ваше имя" [formControlName]="'firstName'">
+
+      <input type="password" class="input"
+             [ngStyle]="{'border-color': phone?.invalid && (phone?.touched || phone?.dirty) ? 'red' : ''}"
+             placeholder="Ваш номер телефона" [formControlName]="'phone'">
+
+      <button class="button" [disabled]="serviceRequestForm.invalid" (click)="addServiceRequest()">Оставить заявку</button>
+    </form>
+
+    <div class="success" #sentSuccess>
+      <div class="success-title">Спасибо за вашу заявку!</div>
+
+      <div class="success-text">Мы свяжемся с вами при первой же возможности.</div>
+
+      <button class="button" (click)="closeFormPopup()">Окей</button>
+    </div>
+  </div>
+</ng-template>

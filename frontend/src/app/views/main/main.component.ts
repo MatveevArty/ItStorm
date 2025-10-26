@@ -1,7 +1,15 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {OwlOptions} from "ngx-owl-carousel-o";
 import {ServiceCardType} from "../../../types/service-card.type";
 import {ArticlesService} from "../../shared/services/articles.service";
+import {ServiceTypeEnum} from "../../../enums/service-type.enum";
+import {FormBuilder, Validators} from "@angular/forms";
+import {MatDialog} from "@angular/material/dialog";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {ActionsService} from "../../shared/services/actions.service";
+import {MatDialogRef} from "@angular/material/dialog/dialog-ref";
+import {DefaultResponseType} from "../../../types/default-response.type";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-main',
@@ -9,6 +17,13 @@ import {ArticlesService} from "../../shared/services/articles.service";
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit {
+
+  @ViewChild('popup') popup!: TemplateRef<ElementRef>;
+
+  /**
+   * Попап
+   */
+  public dialogRef: MatDialogRef<any, any> | null = null;
 
   /**
    * Настройки слайдера с акциями
@@ -107,6 +122,7 @@ export class MainComponent implements OnInit {
       title: 'Создание сайтов',
       description: 'В краткие сроки мы создадим качественный и самое главное продающий сайт для продвижения Вашего бизнеса!',
       price: 7500,
+      serviceType: ServiceTypeEnum.WebDevelopment,
       id: '',
       date: '',
       category: 'Фриланс',
@@ -117,6 +133,7 @@ export class MainComponent implements OnInit {
       title: 'Продвижение',
       description: 'Вам нужен качественный SMM-специалист или грамотный таргетолог? Мы готовы оказать Вам услугу “Продвижения” на наивысшем уровне!',
       price: 3500,
+      serviceType: ServiceTypeEnum.SeoPromotion,
       id: '',
       date: '',
       category: '',
@@ -127,6 +144,7 @@ export class MainComponent implements OnInit {
       title: 'Реклама',
       description: 'Без рекламы не может обойтись ни один бизнес или специалист. Обращаясь к нам, мы гарантируем быстрый прирост клиентов за счёт правильно настроенной рекламы.',
       price: 1000,
+      serviceType: ServiceTypeEnum.Advertising,
       id: '',
       date: '',
       category: '',
@@ -137,6 +155,7 @@ export class MainComponent implements OnInit {
       title: 'Копирайтинг',
       description: 'Наши копирайтеры готовы написать Вам любые продающие текста, которые не только обеспечат рост охватов, но и помогут выйти на новый уровень в продажах.',
       price: 750,
+      serviceType: ServiceTypeEnum.Copywriting,
       id: '',
       date: '',
       category: '',
@@ -144,7 +163,41 @@ export class MainComponent implements OnInit {
     },
   ]
 
-  constructor(private readonly articlesService: ArticlesService,) {
+  /**
+   * Форма с данными Личного кабинета
+   */
+  public serviceRequestForm = this.fb.group({
+    serviceType: ['', Validators.required],
+    firstName: ['', Validators.required],
+    phone: ['', Validators.required],
+  });
+
+  constructor(private readonly articlesService: ArticlesService,
+              private readonly matDialog: MatDialog,
+              private readonly fb: FormBuilder,
+              private readonly _snackBar: MatSnackBar,
+              private readonly actionsService: ActionsService,) {
+  }
+
+  /**
+   * Геттер для поля Услуга
+   */
+  public get serviceType() {
+    return this.serviceRequestForm.get('serviceType');
+  }
+
+  /**
+   * Геттер для поля Имя
+   */
+  public get firstName() {
+    return this.serviceRequestForm.get('firstName');
+  }
+
+  /**
+   * Геттер для поля Номер телефона
+   */
+  public get phone() {
+    return this.serviceRequestForm.get('phone');
   }
 
   ngOnInit(): void {
@@ -152,5 +205,69 @@ export class MainComponent implements OnInit {
       (data: ServiceCardType[]) => {
         this.popularArticles = data;
       });
+  }
+
+  /**
+   * Открытие попапа с формой заявки
+   */
+  public openFormPopup(): void {
+    this.dialogRef = this.matDialog.open(this.popup);
+  }
+
+  /**
+   * Закрытие попапа по крестику
+   */
+  public closeFormPopup(): void {
+    this.dialogRef?.close();
+    if (this.serviceRequestForm && this.serviceType && this.firstName && this.phone) {
+      this.serviceType.setValue('');
+      this.firstName.setValue('');
+      this.phone.setValue('');
+      this.serviceRequestForm.markAsUntouched();
+      this.serviceRequestForm.markAsPristine();
+    }
+  }
+
+  /**
+   * Оставление заявки
+   */
+  public addServiceRequest(): void {
+    if (this.serviceRequestForm.valid && this.serviceType?.value && this.firstName?.value && this.phone?.value) {
+      const paramsObject: { name: string, phone: string, service: string, type: string } = {
+        name: this.firstName?.value,
+        phone: this.phone?.value,
+        service: this.serviceType?.value,
+        type: 'order',
+      }
+
+      this.actionsService.sendServiceRequest(paramsObject)
+        .subscribe({
+          next: (data: DefaultResponseType) => {
+            if ((data as DefaultResponseType).error) {
+              throw new Error((data as DefaultResponseType).message);
+            }
+
+            this._snackBar.open('Заявка успешно отправлена');
+
+            if (this.serviceRequestForm && this.serviceType && this.firstName && this.phone) {
+              this.serviceType.setValue(null);
+              this.firstName.setValue('');
+              this.phone.setValue('');
+              this.serviceRequestForm.markAsUntouched();
+              this.serviceRequestForm.markAsPristine();
+            }
+          },
+          error: (errorResponse: HttpErrorResponse) => {
+            if (errorResponse.error && errorResponse.error.message) {
+              this._snackBar.open(errorResponse.error.message);
+            } else {
+              this._snackBar.open('Ошибка при отправлении заявки');
+            }
+          },
+        });
+    } else {
+      this.serviceRequestForm.markAllAsTouched();
+      this._snackBar.open('Заполните все поля формы');
+    }
   }
 }

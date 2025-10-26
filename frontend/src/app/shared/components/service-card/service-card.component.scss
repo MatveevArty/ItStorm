@@ -1,4 +1,5 @@
 @import '../../../../assets/styles/variables';
+@import '../../../../assets/styles/mixins';
 
 .service-card {
   width: 290px;
@@ -60,4 +61,8 @@
       font-weight: 600;
     }
   }
+}
+
+.success {
+  display: none;
 }

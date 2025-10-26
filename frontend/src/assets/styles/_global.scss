@@ -1,3 +1,6 @@
+@import '_mixins.scss';
+@import '_variables.scss';
+
 html, body {
   margin: 0;
   padding: 0;
@@ -45,4 +48,51 @@ html, body {
 
 .detail-main-text p b, p {
   color: $very-dark-blue;
+}
+
+.request-popup {
+  padding: 95px 150px 85px;
+  min-width: 422px;
+  max-width: 450px;
+  position: relative;
+  text-align: center;
+
+  &-close {
+    position: absolute;
+    cursor: pointer;
+    top: 30px;
+    right: 30px;
+  }
+
+  &-title {
+    @include head-lora-38;
+    margin-bottom: 40px;
+  }
+
+  &-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 5px;
+
+    .input, .button {
+      width: 100%;
+    }
+  }
+
+  .success {
+    width: 450px;
+
+    &-title {
+      @include head-lora-38;
+      margin-bottom: 20px;
+    }
+
+    &-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: $very-dark-blue;
+      margin-bottom: 40px;
+    }
+  }
 }

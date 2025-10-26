@@ -113,8 +113,8 @@ export class DetailComponent implements OnInit {
                 for (let i = 0; i <= 2; i++) {
                   this.articleComments.push(data.comments[i]);
                   this.articleCommentsShownNow += 1;
-                  this.haveMoreArticleComments = true;
                 }
+                this.haveMoreArticleComments = true;
               } else {
                 this.articleComments = data.comments;
                 this.articleCommentsShownNow = this.articleComments.length;
@@ -166,52 +166,53 @@ export class DetailComponent implements OnInit {
    * Соаздние заказа
    */
   public addComment(): void {
-    if (this.commentForm.valid && this.comment?.value) {
-      const paramsObject: { comment: string, article: string } = {
-        comment: this.comment?.value,
-        article: this.article?.id ? this.article?.id : '',
+    if (this.article) {
+      if (this.commentForm.valid && this.comment?.value) {
+        const paramsObject: { comment: string, article: string } = {
+          comment: this.comment?.value,
+          article: this.article.id ? this.article.id : '',
+        }
+
+        this.actionsService.addCommentToArticle(paramsObject)
+          .subscribe({
+            next: (data: DefaultResponseType) => {
+              if ((data as DefaultResponseType).error) {
+                throw new Error((data as DefaultResponseType).message);
+              }
+
+              this._snackBar.open('Комментарий успешно добавлен');
+
+              if (this.comment) {
+                this.comment.setValue('');
+                this.commentForm.markAsUntouched();
+                this.commentForm.markAsPristine();
+              }
+
+              if (this.article) {
+                this.actionsService.getArticleComments(this.article.id, 0).subscribe(
+                  (data) => {
+                    this.articleComments = [data.comments[0], ...this.articleComments];
+                    this.articleCommentsShownNow += 1;
+
+                    console.log(this.articleComments);
+                    console.log(this.articleCommentsShownNow);
+                    console.log(this.haveMoreArticleComments);
+                  }
+                );
+              }
+            },
+            error: (errorResponse: HttpErrorResponse) => {
+              if (errorResponse.error && errorResponse.error.message) {
+                this._snackBar.open(errorResponse.error.message);
+              } else {
+                this._snackBar.open('Ошибка при добавлении комментария');
+              }
+            },
+          });
+      } else {
+        this.commentForm.markAllAsTouched();
+        this._snackBar.open('Заполните поле комментария');
       }
-
-      this.actionsService.addCommentToArticle(paramsObject)
-        .subscribe({
-          next: (data: DefaultResponseType) => {
-            if ((data as DefaultResponseType).error) {
-              throw new Error((data as DefaultResponseType).message);
-            }
-
-            this._snackBar.open('Комментарий успешно добавлен');
-
-            if (this.comment) {
-              this.comment.setValue('');
-              this.commentForm.markAsUntouched();
-              this.commentForm.markAsPristine();
-            }
-
-            if (this.article) {
-              console.log(1);
-              this.actionsService.getArticleComments(this.article.id, 0).subscribe(
-                (data) => {
-                  this.articleComments = [data.comments[0], ...this.articleComments];
-                  this.articleCommentsShownNow += 1;
-
-                  console.log(this.articleComments);
-                  console.log(this.articleCommentsShownNow);
-                  console.log(this.haveMoreArticleComments);
-                }
-              );
-            }
-          },
-          error: (errorResponse: HttpErrorResponse) => {
-            if (errorResponse.error && errorResponse.error.message) {
-              this._snackBar.open(errorResponse.error.message);
-            } else {
-              this._snackBar.open('Ошибка при добавлении комментария');
-            }
-          },
-        });
-    } else {
-      this.commentForm.markAllAsTouched();
-      this._snackBar.open('Заполните поле комментария');
     }
   }
 

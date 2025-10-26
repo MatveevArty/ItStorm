@@ -1,3 +1,5 @@
+import {ServiceTypeEnum} from "../enums/service-type.enum";
+
 /**
  * Карточка услуги
  */
@@ -10,4 +12,5 @@ export type ServiceCardType = {
   category: string,
   url: string,
   price?: number,
+  serviceType?: ServiceTypeEnum,
 }

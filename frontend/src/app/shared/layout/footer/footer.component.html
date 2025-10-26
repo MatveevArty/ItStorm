@@ -38,7 +38,7 @@
 
         <div class="footer-middle-contact-info">+7 (499) 343-13-34</div>
 
-        <button class="button footer-middle-contact-button">Перезвоните мне</button>
+        <button class="button footer-middle-contact-button" (click)="openConsultationFormPopup()">Перезвоните мне</button>
       </div>
 
       <div class="footer-middle-contact">
@@ -69,3 +69,33 @@
     <div class="footer-bottom">&copy; 2022. Все права защищены</div>
   </div>
 </footer>
+
+<ng-template #popupConsultation>
+  <div class="request-popup">
+    <div class="request-popup-title">Закажите бесплатную консультацию!</div>
+
+    <div class="request-popup-close" (click)="closeConsultationFormPopup()">
+      <img src="assets/images/pages/main/close-cross-gray.svg" alt="Крестик">
+    </div>
+
+    <form class="request-popup-form" [formGroup]="consultationRequestForm">
+      <input type="password" class="input"
+             [ngStyle]="{'border-color': firstNameConsult?.invalid && (firstNameConsult?.touched || firstNameConsult?.dirty) ? 'red' : ''}"
+             placeholder="Ваше имя" [formControlName]="'firstNameConsult'">
+
+      <input type="password" class="input"
+             [ngStyle]="{'border-color': phoneConsult?.invalid && (phoneConsult?.touched || phoneConsult?.dirty) ? 'red' : ''}"
+             placeholder="Ваш номер телефона" [formControlName]="'phoneConsult'">
+
+      <button class="button" [disabled]="consultationRequestForm.invalid" (click)="addConsultationRequest()">Заказать консультацию</button>
+    </form>
+
+    <div class="success" #sentSuccess>
+      <div class="success-title">Спасибо за вашу заявку!</div>
+
+      <div class="success-text">Мы свяжемся с вами при первой же возможности.</div>
+
+      <button class="button" (click)="closeConsultationFormPopup()">Окей</button>
+    </div>
+  </div>
+</ng-template>
