@@ -34,8 +34,6 @@ export class CategoryFilterComponent implements OnInit {
       };
 
       this.isChecked = this.activeParams.categories.some(item => item === this.category?.url);
-
-      console.log(this.activeParams.categories);
     });
   }
 

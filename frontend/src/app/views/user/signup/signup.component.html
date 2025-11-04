@@ -25,8 +25,8 @@
         <div class="auth-checkbox">
           <input type="checkbox" id="agree" [formControlName]="'agree'">
           <label for="agree">
-            Я принимаю <a>условия пользовательского соглашения</a>
-            и даю <a href="javascript:void(0)">согласие на обработку персональных данных</a>.
+            Я принимаю <a [routerLink]="'/agreement'" fragment="agreement-first">условия пользовательского соглашения</a>
+            и даю <a [routerLink]="'/agreement'" fragment="agreement-second">согласие на обработку персональных данных</a>.
           </label>
         </div>
       </div>

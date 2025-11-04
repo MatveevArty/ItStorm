@@ -1,17 +1,16 @@
 <section class="main">
   <div class="container">
     <div class="main-carousel">
-      <div class="carousel-chevrons">
-        <a class="carousel-chevron move-backwards" (click)="owlCar.prev()">
-          <img src="/assets/images/pages/main/prev-page-chevron.svg" alt="Назад">
-        </a>
-
-        <a class="carousel-chevron move-forward" (click)="owlCar.next()">
-          <img src="/assets/images/pages/main/next-page-chevron.svg" alt="Вперёд">
-        </a>
-      </div>
-
       <div class="carousel-slides">
+        <div class="carousel-chevrons">
+          <a class="carousel-chevron move-backwards" (click)="owlCar.prev()">
+            <img src="/assets/images/pages/main/prev-page-chevron.svg" alt="Назад">
+          </a>
+
+          <a class="carousel-chevron move-forward" (click)="owlCar.next()">
+            <img src="/assets/images/pages/main/next-page-chevron.svg" alt="Вперёд">
+          </a>
+        </div>
         <owl-carousel-o [options]="customOptions" #owlCar>
           <ng-template carouselSlide>
             <div class="carousel-slide carousel-slide-1">
@@ -72,7 +71,7 @@
   </div>
 </section>
 
-<section class="services">
+<section class="services" id="services">
   <div class="container">
     <div class="services-header">Услуги, которые мы предлагаем</div>
 
@@ -84,7 +83,7 @@
   </div>
 </section>
 
-<section class="about">
+<section class="about" id="about">
   <div class="container">
     <div class="about-image">
       <img src="assets/images/pages/main/about-image.png" alt="О нас">
@@ -158,14 +157,18 @@
 
 <section class="popular">
   <div class="container">
-    <div class="popular-title">Лучшие предложения месяца</div>
+    <div class="popular-title">Популярные статьи из блога</div>
 
     <div class="popular-items">
       <app-service-card *ngFor="let article of popularArticles" [serviceCard]="article" ></app-service-card>
     </div>
 
-    <div class="popular-link">
-      Перейти в блог
+    <div class="popular-link" [routerLink]="'/catalog'">
+      <div class="popular-link-text">
+        Перейти в блог
+      </div>
+
+      <img src="assets/images/pages/main/go-to-catalog-chevron.svg" alt="Стрелка">
     </div>
   </div>
 </section>
@@ -204,7 +207,7 @@
   </div>
 </section>
 
-<section class="contacts">
+<section class="contacts" id="contacts">
   <div class="container">
     <div class="contacts-map">
       <iframe
@@ -236,26 +239,26 @@
         <div class="contacts-info-block">
           <div class="contacts-info-block-title">Электронный адрес</div>
 
-          <div class="contacts-info-block-text">
+          <a href="mailto:info@itstorm.com" class="contacts-info-block-text">
             info@itstorm.com
-          </div>
+          </a>
         </div>
 
         <div class="contacts-info-block">
           <div class="contacts-info-block-title">Мы в социальных сетях</div>
 
           <div class="contacts-info-block-socials">
-            <div class="contacts-info-block-social">
+            <a href="https://vk.com" class="contacts-info-block-social">
               <img src="assets/images/pages/main/contacts-vk-icon.svg" alt="ВК">
-            </div>
+            </a>
 
-            <div class="contacts-info-block-social">
+            <a href="https://facebook.com" class="contacts-info-block-social">
               <img src="assets/images/pages/main/contacts-fb-icon.svg" alt="FB">
-            </div>
+            </a>
 
-            <div class="contacts-info-block-social">
+            <a href="https://instagram.com" class="contacts-info-block-social">
               <img src="assets/images/pages/main/contacts-inst-icon.svg" alt="INST">
-            </div>
+            </a>
           </div>
         </div>
       </div>
@@ -264,7 +267,7 @@
 </section>
 
 <ng-template #popup>
-  <div class="request-popup">
+  <div class="request-popup" #requestPopup>
     <div class="request-popup-title">Заявка на услугу</div>
 
     <div class="request-popup-close" (click)="closeFormPopup()">
@@ -276,15 +279,23 @@
              [ngStyle]="{'border-color': serviceType?.invalid && (serviceType?.touched || serviceType?.dirty) ? 'red' : ''}"
              placeholder="Тип услуги" [formControlName]="'serviceType'">
 
-      <input type="password" class="input"
+      <input type="text" class="input"
              [ngStyle]="{'border-color': firstName?.invalid && (firstName?.touched || firstName?.dirty) ? 'red' : ''}"
              placeholder="Ваше имя" [formControlName]="'firstName'">
 
-      <input type="password" class="input"
+      <input type="text" class="input"
              [ngStyle]="{'border-color': phone?.invalid && (phone?.touched || phone?.dirty) ? 'red' : ''}"
              placeholder="Ваш номер телефона" [formControlName]="'phone'">
 
       <button class="button" [disabled]="serviceRequestForm.invalid" (click)="addServiceRequest()">Оставить заявку</button>
     </form>
+  </div>
+
+  <div class="success" #sentSuccess>
+    <div class="success-title">Спасибо за вашу заявку!</div>
+
+    <div class="success-text">Мы свяжемся с вами при первой же возможности.</div>
+
+    <button class="button" (click)="closeFormPopup()">Окей</button>
   </div>
 </ng-template>

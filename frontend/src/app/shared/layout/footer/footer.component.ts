@@ -7,6 +7,7 @@ import {ActionsService} from "../../services/actions.service";
 import {MatDialogRef} from "@angular/material/dialog/dialog-ref";
 import {DefaultResponseType} from "../../../../types/default-response.type";
 import {HttpErrorResponse} from "@angular/common/http";
+import {RequestTypeEnum} from "../../../../enums/request-type.enum";
 
 @Component({
   selector: 'app-footer',
@@ -16,6 +17,10 @@ import {HttpErrorResponse} from "@angular/common/http";
 export class FooterComponent {
 
   @ViewChild('popupConsultation') popupConsultation!: TemplateRef<ElementRef>;
+
+  @ViewChild('requestPopup') requestPopup!: ElementRef<HTMLElement>;
+
+  @ViewChild('sentSuccess') sentSuccess!: ElementRef<HTMLElement>;
 
   /**
    * Попап
@@ -79,7 +84,7 @@ export class FooterComponent {
       const paramsObject: { name: string, phone: string, type: string } = {
         name: this.firstNameConsult?.value,
         phone: this.phoneConsult?.value,
-        type: 'consultation',
+        type: RequestTypeEnum.Consultation,
       }
 
       this.actionsService.sendServiceRequest(paramsObject)
@@ -89,13 +94,16 @@ export class FooterComponent {
               throw new Error((data as DefaultResponseType).message);
             }
 
-            this._snackBar.open('Заявка на консультацию успешно отправлена');
-
             if (this.consultationRequestForm && this.firstNameConsult && this.phoneConsult) {
               this.firstNameConsult.setValue('');
               this.phoneConsult.setValue('');
               this.consultationRequestForm.markAsUntouched();
               this.consultationRequestForm.markAsPristine();
+            }
+
+            if (this.requestPopup && this.sentSuccess) {
+              this.requestPopup.nativeElement.style.display = 'none';
+              this.sentSuccess.nativeElement.style.display = 'block';
             }
           },
           error: (errorResponse: HttpErrorResponse) => {

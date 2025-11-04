@@ -1,13 +1,13 @@
-<div class="service-card" *ngIf="serviceCard">
+<div class="service-card" *ngIf="serviceCard" [class.is-catalog-card]="!isMainPageService">
   <div class="service-card__info">
     <div class="service-card__category" *ngIf="!isMainPageService">{{ serviceCard.category }}</div>
 
-    <div class="service-card__image" *ngIf="!isMainPageService">
-      <img [src]="serverStaticPath + serviceCard.image" alt="">
+    <div class="service-card__image" *ngIf="!isMainPageService"
+         style="background-image: url({{ serverStaticPath + serviceCard.image }})">
     </div>
 
-    <div class="service-card__image" *ngIf="isMainPageService">
-      <img [src]="'assets/images/pages/main/' + serviceCard.image" alt="">
+    <div class="service-card__image" *ngIf="isMainPageService"
+         style="background-image: url({{ assetsPath + serviceCard.image }})">
     </div>
 
 
@@ -16,18 +16,21 @@
     <div class="service-card__description">{{ serviceCard.description }}</div>
 
 
-    <div class="service-card__link" *ngIf="!isMainPageService" (click)="navigate()">Читать далее</div>
   </div>
 
   <div class="service-card__actions" *ngIf="isMainPageService">
-    <div class="service-card__actions-price">От {{ serviceCard.price }} ₽</div>
+    <div class="service-card__actions-price">От {{ serviceCard.price | priceFormat }} ₽</div>
 
     <button class="button" (click)="openFormPopup()">Подробнее</button>
+  </div>
+
+  <div class="service-card__actions" *ngIf="!isMainPageService">
+    <div class="service-card__link"  (click)="navigate()">Читать далее</div>
   </div>
 </div>
 
 <ng-template #popup>
-  <div class="request-popup">
+  <div class="request-popup" #requestPopup>
     <div class="request-popup-title">Заявка на услугу</div>
 
     <div class="request-popup-close" (click)="closeFormPopup()">
@@ -39,23 +42,23 @@
              [ngStyle]="{'border-color': serviceType?.invalid && (serviceType?.touched || serviceType?.dirty) ? 'red' : ''}"
              placeholder="Тип услуги" [formControlName]="'serviceType'">
 
-      <input type="password" class="input"
+      <input type="text" class="input"
              [ngStyle]="{'border-color': firstName?.invalid && (firstName?.touched || firstName?.dirty) ? 'red' : ''}"
              placeholder="Ваше имя" [formControlName]="'firstName'">
 
-      <input type="password" class="input"
+      <input type="text" class="input"
              [ngStyle]="{'border-color': phone?.invalid && (phone?.touched || phone?.dirty) ? 'red' : ''}"
              placeholder="Ваш номер телефона" [formControlName]="'phone'">
 
       <button class="button" [disabled]="serviceRequestForm.invalid" (click)="addServiceRequest()">Оставить заявку</button>
     </form>
+  </div>
 
-    <div class="success" #sentSuccess>
-      <div class="success-title">Спасибо за вашу заявку!</div>
+  <div class="success" #sentSuccess>
+    <div class="success-title">Спасибо за вашу заявку!</div>
 
-      <div class="success-text">Мы свяжемся с вами при первой же возможности.</div>
+    <div class="success-text">Мы свяжемся с вами при первой же возможности.</div>
 
-      <button class="button" (click)="closeFormPopup()">Окей</button>
-    </div>
+    <button class="button" (click)="closeFormPopup()">Окей</button>
   </div>
 </ng-template>

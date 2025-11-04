@@ -5,7 +5,6 @@ import {Observable} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {DefaultResponseType} from "../../../types/default-response.type";
 import {ReactionTypeEnum} from "../../../enums/reaction-type.enum";
-import {ServiceCardType} from "../../../types/service-card.type";
 
 @Injectable({
   providedIn: 'root'

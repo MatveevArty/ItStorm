@@ -9,7 +9,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {ActionsService} from "../../services/actions.service";
 import {DefaultResponseType} from "../../../../types/default-response.type";
 import {HttpErrorResponse} from "@angular/common/http";
-import {ServiceTypeEnum} from "../../../../enums/service-type.enum";
+import {RequestTypeEnum} from "../../../../enums/request-type.enum";
 
 @Component({
   selector: 'app-service-card',
@@ -26,7 +26,9 @@ export class ServiceCardComponent {
 
   @ViewChild('popup') popup!: TemplateRef<ElementRef>;
 
-  @ViewChild('sentSuccess') sentSuccess!: TemplateRef<ElementRef>;
+  @ViewChild('requestPopup') requestPopup!: ElementRef<HTMLElement>;
+
+  @ViewChild('sentSuccess') sentSuccess!: ElementRef<HTMLElement>;
 
   public assetsPath: string = 'assets/images/pages/main/';
 
@@ -123,7 +125,7 @@ export class ServiceCardComponent {
         name: this.firstName?.value,
         phone: this.phone?.value,
         service: this.serviceType?.value,
-        type: 'order',
+        type: RequestTypeEnum.Order,
       }
 
       this.actionsService.sendServiceRequest(paramsObject)
@@ -133,8 +135,6 @@ export class ServiceCardComponent {
               throw new Error((data as DefaultResponseType).message);
             }
 
-            this._snackBar.open('Заявка успешно отправлена');
-
             if (this.serviceRequestForm && this.serviceType && this.firstName && this.phone) {
               this.serviceType.setValue(null);
               this.firstName.setValue('');
@@ -143,8 +143,9 @@ export class ServiceCardComponent {
               this.serviceRequestForm.markAsPristine();
             }
 
-            if (this.sentSuccess && this.sentSuccess.elementRef) {
-              this.sentSuccess.elementRef.nativeElement.style.display = 'block';
+            if (this.requestPopup && this.sentSuccess) {
+              this.requestPopup.nativeElement.style.display = 'none';
+              this.sentSuccess.nativeElement.style.display = 'block';
             }
           },
           error: (errorResponse: HttpErrorResponse) => {

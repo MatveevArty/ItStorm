@@ -15,23 +15,23 @@
 
     <div class="detail-main">
       <div class="detail-main-info">
-        <div class="detail-text" #articleText [innerHTML]="article.text"></div>
+        <div class="detail-main-text" #articleText [innerHTML]="article.text"></div>
 
         <div class="detail-share">
           <div class="detail-share-text">Понравилась статья? Поделитесь ею в своих социальных сетях!</div>
 
           <div class="detail-share-socials">
-            <div class="detail-share-social">
+            <a href="https://vk.com" class="detail-share-social">
               <img src="assets/images/pages/article/contacts-light-vk-icon.svg" alt="ВК">
-            </div>
+            </a>
 
-            <div class="detail-share-social">
+            <a href="https://facebook.com" class="detail-share-social">
               <img src="assets/images/pages/article/contacts-light-fb-icon.svg" alt="FB">
-            </div>
+            </a>
 
-            <div class="detail-share-social">
+            <a href="https://instagram" class="detail-share-social">
               <img src="assets/images/pages/article/contacts-light-inst-icon.svg" alt="INST">
-            </div>
+            </a>
           </div>
         </div>
 
@@ -62,14 +62,14 @@
                 <div class="detail-comment-log-info">
                   <div class="detail-comment-log-info-username">{{ comment.user.name }}</div>
 
-                  <div class="detail-comment-log-info-time">{{ comment.date }}</div>
+                  <div class="detail-comment-log-info-time">{{ comment.date | dateFormat }}</div>
                 </div>
               </div>
 
               <div class="detail-comment-text">{{ comment.text }}</div>
 
               <div class="detail-comment-actions">
-                <div class="detail-comment-action detail-comment-actions-like"
+                <div class="detail-comment-action detail-comment-actions-like" [class.pressed]="comment.isLikePressed"
                      (click)="applyReactionToComment(comment.id, ReactionTypeEnum.Like)">
                   <span>{{ comment.likesCount }}</span>
 
@@ -80,7 +80,7 @@
                        *ngIf="comment.isLikePressed">
                 </div>
 
-                <div class="detail-comment-action detail-comment-actions-dislike"
+                <div class="detail-comment-action detail-comment-actions-dislike" [class.pressed]="comment.isDislikePressed"
                      (click)="applyReactionToComment(comment.id, ReactionTypeEnum.Dislike)">
                   <span>{{ comment.dislikesCount }}</span>
 

@@ -4,16 +4,18 @@ import {ServiceCardComponent} from "./components/service-card/service-card.compo
 import { CategoryFilterComponent } from './components/category-filter/category-filter.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import {ReactiveFormsModule} from "@angular/forms";
+import { DateFormatPipe } from './pipes/date-format.pipe';
+import { PriceFormatPipe } from './pipes/price-format.pipe';
 
 
 
 @NgModule({
-  declarations: [ServiceCardComponent, CategoryFilterComponent],
+  declarations: [ServiceCardComponent, CategoryFilterComponent, DateFormatPipe, PriceFormatPipe],
   imports: [
     CommonModule,
     MatDialogModule,
     ReactiveFormsModule
   ],
-  exports: [ServiceCardComponent, CategoryFilterComponent]
+  exports: [ServiceCardComponent, CategoryFilterComponent, DateFormatPipe, PriceFormatPipe]
 })
 export class SharedModule { }

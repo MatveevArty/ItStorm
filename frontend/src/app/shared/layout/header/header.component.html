@@ -8,19 +8,19 @@
       <nav class="header-menu">
         <ul>
           <li>
-            <a>Услуги</a>
+            <a [routerLink]="'/'" fragment="services">Услуги</a>
           </li>
           <li>
-            <a>О нас</a>
+            <a [routerLink]="'/'" fragment="about">О нас</a>
           </li>
           <li>
-            <a [routerLink]="'/catalog'">Статьи</a>
+            <a [routerLink]="'/catalog'" [routerLinkActive]="'active'">Статьи</a>
           </li>
           <li>
-            <a>Отзывы</a>
+            <a [routerLink]="'/'" fragment="reviews">Отзывы</a>
           </li>
           <li>
-            <a>Контакты</a>
+            <a [routerLink]="'/'" fragment="contacts">Контакты</a>
           </li>
         </ul>
       </nav>

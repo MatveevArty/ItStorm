@@ -55,7 +55,7 @@
       row-gap: 60px;
       max-width: 818px;
 
-      .detail-text {
+      .detail-main-text {
         margin-top: 60px;
         font-size: 14px;
       }
@@ -76,6 +76,11 @@
           align-items: center;
           justify-content: center;
           column-gap: 13px;
+          cursor: pointer;
+
+          a:hover {
+            opacity: 0.5;
+          }
         }
       }
 
@@ -154,6 +159,11 @@
                 align-items: center;
                 justify-content: space-between;
                 column-gap: 3px;
+                cursor: pointer;
+
+                &.pressed span {
+                  color: $main-light-blue;
+                }
               }
             }
           }

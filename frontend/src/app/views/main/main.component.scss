@@ -3,19 +3,33 @@
 
 .main {
   &-carousel {
-    .carousel-chevrons {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background-color: $main-light-blue;
-      width: 100%;
-
-      .carousel-chevron {
-        cursor: pointer;
-      }
-    }
-
     .carousel-slides  {
+      position: relative;
+
+      .carousel-chevrons {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        top: calc(50% - 55px);
+        z-index: 2;
+
+        .carousel-chevron {
+          cursor: pointer;
+
+          &.move-backwards {
+            left: 0;
+            padding: 30px 30px 30px 10px;
+          }
+
+          &.move-forward {
+            right: 0;
+            padding: 30px 10px 30px 30px;
+          }
+        }
+      }
+
       .carousel-slide {
         background-color: $main-light-blue;
         width: 100%;
@@ -125,9 +139,8 @@
   &-items {
     display: flex;
     align-items: baseline;
-    justify-content: center;
+    justify-content: space-between;
     flex-wrap: wrap;
-    gap: 26px;
 
     .services-item {
       height: auto;
@@ -136,7 +149,7 @@
 }
 
 .about {
-  margin: 120px 0;
+  padding: 120px 0;
 
   .container {
     display: flex;
@@ -242,25 +255,36 @@
 }
 
 .popular {
+  &-title {
+    @include head-lora-38;
+    margin-bottom: 40px;
+  }
 
-  .container {
+  &-items {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
 
-    .popular-title {
-      @include head-lora-38;
-    }
+  &-link {
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    column-gap: 14px;
+    cursor: pointer;
 
-    .popular-items {
-      display: flex;
-      align-items: baseline;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 26px;
+    &-text {
+      font-size: 20px;
+      font-weight: 500;
+      color: $main-light-blue;
     }
   }
 }
 
 .reviews {
-  margin: 120px 0;
+  padding: 120px 0;
 
   &-title {
     @include head-lora-38;
@@ -370,6 +394,7 @@
             font-size: 14px;
             line-height: 130%;
             color: $very-dark-blue;
+            text-decoration: none;
           }
 
           &-socials {
@@ -377,6 +402,11 @@
             align-items: center;
             justify-content: space-between;
             width: 130px;
+            cursor: pointer;
+
+            a:hover {
+              opacity: 0.5;
+            }
           }
         }
       }

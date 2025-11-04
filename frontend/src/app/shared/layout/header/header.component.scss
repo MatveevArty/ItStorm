@@ -30,15 +30,17 @@
           li {
             list-style: none;
 
-            &.active {
-              color: $main-light-blue;
-            }
-
             a {
               font-size: 16px;
+              color: $main-dark-blue;
               cursor: pointer;
               text-decoration: none;
+
+              &.active {
+                color: $main-light-blue;
+              }
             }
+
           }
         }
       }

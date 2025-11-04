@@ -8,19 +8,19 @@
       <nav class="footer-up-menu">
         <ul>
           <li>
-            <a>Услуги</a>
+            <a [routerLink]="'/'" fragment="services">Услуги</a>
           </li>
           <li>
-            <a>О нас</a>
+            <a [routerLink]="'/'" fragment="about">О нас</a>
           </li>
           <li>
-            <a>Статьи</a>
+            <a [routerLink]="'/catalog'" [routerLinkActive]="'active'">Статьи</a>
           </li>
           <li>
-            <a>Отзывы</a>
+            <a [routerLink]="'/'" fragment="reviews">Отзывы</a>
           </li>
           <li>
-            <a>Контакты</a>
+            <a [routerLink]="'/'" fragment="contacts">Контакты</a>
           </li>
         </ul>
       </nav>
@@ -36,30 +36,31 @@
       <div class="footer-middle-contact">
         <div class="footer-middle-contact-head">Телефон</div>
 
-        <div class="footer-middle-contact-info">+7 (499) 343-13-34</div>
+        <a href="tel:+74993431334" class="footer-middle-contact-info">+7 (499) 343-13-34</a>
 
-        <button class="button footer-middle-contact-button" (click)="openConsultationFormPopup()">Перезвоните мне</button>
+        <button class="button footer-middle-contact-button" (click)="openConsultationFormPopup()">Перезвоните мне
+        </button>
       </div>
 
       <div class="footer-middle-contact">
         <div class="footer-middle-contact-head">E-mail</div>
 
-        <div class="footer-middle-contact-info">info@itstorm.com</div>
+        <a href="mailto:info@itstorm.com" class="footer-middle-contact-info">info@itstorm.com</a>
       </div>
 
       <div class="footer-middle-contact">
         <div class="footer-middle-contact-head">Мы в социальных сетях:</div>
 
         <div class="footer-middle-contact-socials">
-          <a>
+          <a href="https://vk.com">
             <img src="/assets/images/pages/footer/socials-vk-com.svg" alt="vkcom">
           </a>
 
-          <a>
+          <a href="https://facebook.com">
             <img src="/assets/images/pages/footer/socials-facebook.svg" alt="facebook">
           </a>
 
-          <a>
+          <a href="https://instagram.com">
             <img src="/assets/images/pages/footer/socials-instagram.svg" alt="insta">
           </a>
         </div>
@@ -71,7 +72,7 @@
 </footer>
 
 <ng-template #popupConsultation>
-  <div class="request-popup">
+  <div class="request-popup" #requestPopup>
     <div class="request-popup-title">Закажите бесплатную консультацию!</div>
 
     <div class="request-popup-close" (click)="closeConsultationFormPopup()">
@@ -79,23 +80,25 @@
     </div>
 
     <form class="request-popup-form" [formGroup]="consultationRequestForm">
-      <input type="password" class="input"
+      <input type="text" class="input"
              [ngStyle]="{'border-color': firstNameConsult?.invalid && (firstNameConsult?.touched || firstNameConsult?.dirty) ? 'red' : ''}"
              placeholder="Ваше имя" [formControlName]="'firstNameConsult'">
 
-      <input type="password" class="input"
+      <input type="text" class="input"
              [ngStyle]="{'border-color': phoneConsult?.invalid && (phoneConsult?.touched || phoneConsult?.dirty) ? 'red' : ''}"
              placeholder="Ваш номер телефона" [formControlName]="'phoneConsult'">
 
-      <button class="button" [disabled]="consultationRequestForm.invalid" (click)="addConsultationRequest()">Заказать консультацию</button>
+      <button class="button" [disabled]="consultationRequestForm.invalid" (click)="addConsultationRequest()">Заказать
+        консультацию
+      </button>
     </form>
+  </div>
 
-    <div class="success" #sentSuccess>
-      <div class="success-title">Спасибо за вашу заявку!</div>
+  <div class="success" #sentSuccess>
+    <div class="success-title">Спасибо за вашу заявку!</div>
 
-      <div class="success-text">Мы свяжемся с вами при первой же возможности.</div>
+    <div class="success-text">Мы свяжемся с вами при первой же возможности.</div>
 
-      <button class="button" (click)="closeConsultationFormPopup()">Окей</button>
-    </div>
+    <button class="button" (click)="closeConsultationFormPopup()">Окей</button>
   </div>
 </ng-template>

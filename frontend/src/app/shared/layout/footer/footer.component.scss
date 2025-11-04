@@ -34,8 +34,13 @@
 
             a {
               font-size: 16px;
+              color: $main-dark-blue;
               cursor: pointer;
               text-decoration: none;
+
+              &.active {
+                color: $main-light-blue;
+              }
             }
           }
         }
@@ -63,6 +68,7 @@
         &-info {
           font-weight: 400;
           color: $main-dark-blue;
+          text-decoration: none;
         }
 
         &-button {
@@ -75,6 +81,11 @@
           align-items: center;
           justify-content: flex-start;
           column-gap: 12px;
+          cursor: pointer;
+
+          a:hover  {
+            opacity: 0.5;
+          }
         }
       }
     }

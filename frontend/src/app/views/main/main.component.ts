@@ -10,6 +10,10 @@ import {ActionsService} from "../../shared/services/actions.service";
 import {MatDialogRef} from "@angular/material/dialog/dialog-ref";
 import {DefaultResponseType} from "../../../types/default-response.type";
 import {HttpErrorResponse} from "@angular/common/http";
+import {reviews} from "../../../assets/data/reviews";
+import {ReviewType} from "../../../types/review.type";
+import {articleCards} from "../../../assets/data/article-cards";
+import {RequestTypeEnum} from "../../../enums/request-type.enum";
 
 @Component({
   selector: 'app-main',
@@ -19,6 +23,10 @@ import {HttpErrorResponse} from "@angular/common/http";
 export class MainComponent implements OnInit {
 
   @ViewChild('popup') popup!: TemplateRef<ElementRef>;
+
+  @ViewChild('requestPopup') requestPopup!: ElementRef<HTMLElement>;
+
+  @ViewChild('sentSuccess') sentSuccess!: ElementRef<HTMLElement>;
 
   /**
    * Попап
@@ -75,38 +83,10 @@ export class MainComponent implements OnInit {
     },
   }
 
-  public reviews = [
-    {
-      name: 'Станислав',
-      image: 'reviews-avatar-1.png',
-      text: 'Спасибо огромное АйтиШторму за прекрасный блог с полезными статьями! Именно они и побудили меня углубиться в тему SMM и начать свою карьеру.',
-    },
-    {
-      name: 'Алёна',
-      image: 'reviews-avatar-2.png',
-      text: 'Обратилась в АйтиШторм за помощью копирайтера. Ни разу ещё не пожалела! Ребята действительно вкладывают душу в то, что делают, и каждый текст, который я получаю, с нетерпением хочется выложить в сеть.',
-    },
-    {
-      name: 'Мария',
-      image: 'reviews-avatar-3.png',
-      text: 'Команда АйтиШторма за такой короткий промежуток времени сделала невозможное: от простой фирмы по услуге продвижения выросла в мощный блог о важности личного бренда. Класс!',
-    },
-    {
-      name: 'Аделина',
-      image: 'reviews-avatar-1.png',
-      text: 'Хочу поблагодарить всю команду за помощь в подборе подарка для моей мамы! Все просто в восторге от мини-сада! А самое главное, что за ним удобно ухаживать, ведь в комплекте мне дали целую инструкцию.',
-    },
-    {
-      name: 'Яника',
-      image: 'reviews-avatar-1.png',
-      text: 'Спасибо большое за мою обновлённую коллекцию суккулентов! Сервис просто на 5+: быстро, удобно, недорого. Что ещё нужно клиенту для счастья?',
-    },
-    {
-      name: 'Марина',
-      image: 'reviews-avatar-1.png',
-      text: 'Для меня всегда важным аспектом было наличие не только физического магазина, но и онлайн-маркета, ведь не всегда есть возможность прийти на место. Ещё нигде не встречала такого огромного ассортимента!',
-    },
-  ]
+  /**
+   * Массивы отзывов
+   */
+  public reviews: ReviewType[] = reviews;
 
   /**
    * Массив популярных статей
@@ -116,52 +96,7 @@ export class MainComponent implements OnInit {
   /**
    * Карточки услуг
    */
-  public serviceCards: ServiceCardType[] = [
-    {
-      image: 'service-image-1.png',
-      title: 'Создание сайтов',
-      description: 'В краткие сроки мы создадим качественный и самое главное продающий сайт для продвижения Вашего бизнеса!',
-      price: 7500,
-      serviceType: ServiceTypeEnum.WebDevelopment,
-      id: '',
-      date: '',
-      category: 'Фриланс',
-      url: '',
-    },
-    {
-      image: 'service-image-2.png',
-      title: 'Продвижение',
-      description: 'Вам нужен качественный SMM-специалист или грамотный таргетолог? Мы готовы оказать Вам услугу “Продвижения” на наивысшем уровне!',
-      price: 3500,
-      serviceType: ServiceTypeEnum.SeoPromotion,
-      id: '',
-      date: '',
-      category: '',
-      url: '',
-    },
-    {
-      image: 'service-image-3.png',
-      title: 'Реклама',
-      description: 'Без рекламы не может обойтись ни один бизнес или специалист. Обращаясь к нам, мы гарантируем быстрый прирост клиентов за счёт правильно настроенной рекламы.',
-      price: 1000,
-      serviceType: ServiceTypeEnum.Advertising,
-      id: '',
-      date: '',
-      category: '',
-      url: '',
-    },
-    {
-      image: 'service-image-4.png',
-      title: 'Копирайтинг',
-      description: 'Наши копирайтеры готовы написать Вам любые продающие текста, которые не только обеспечат рост охватов, но и помогут выйти на новый уровень в продажах.',
-      price: 750,
-      serviceType: ServiceTypeEnum.Copywriting,
-      id: '',
-      date: '',
-      category: '',
-      url: '',
-    },
-  ]
+  public serviceCards: ServiceCardType[] = articleCards;
 
   /**
    * Форма с данными Личного кабинета
@@ -237,7 +172,7 @@ export class MainComponent implements OnInit {
         name: this.firstName?.value,
         phone: this.phone?.value,
         service: this.serviceType?.value,
-        type: 'order',
+        type: RequestTypeEnum.Order,
       }
 
       this.actionsService.sendServiceRequest(paramsObject)
@@ -247,14 +182,17 @@ export class MainComponent implements OnInit {
               throw new Error((data as DefaultResponseType).message);
             }
 
-            this._snackBar.open('Заявка успешно отправлена');
-
             if (this.serviceRequestForm && this.serviceType && this.firstName && this.phone) {
               this.serviceType.setValue(null);
               this.firstName.setValue('');
               this.phone.setValue('');
               this.serviceRequestForm.markAsUntouched();
               this.serviceRequestForm.markAsPristine();
+            }
+
+            if (this.requestPopup && this.sentSuccess) {
+              this.requestPopup.nativeElement.style.display = 'none';
+              this.sentSuccess.nativeElement.style.display = 'block';
             }
           },
           error: (errorResponse: HttpErrorResponse) => {
